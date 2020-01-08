@@ -1,30 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "mcw-anesth-lecture-archive",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Archive for lectures",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
-  "dependencies": {
-    "gatsby": "^2.18.12",
-    "gatsby-image": "^2.2.34",
-    "gatsby-plugin-manifest": "^2.2.31",
-    "gatsby-plugin-offline": "^3.0.27",
-    "gatsby-plugin-react-helmet": "^3.1.16",
-    "gatsby-plugin-sharp": "^2.3.5",
-    "gatsby-source-filesystem": "^2.1.40",
-    "gatsby-transformer-sharp": "^2.3.7",
-    "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-helmet": "^5.2.1"
-  },
-  "devDependencies": {
-    "prettier": "^1.19.1"
-  },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "MIT",
+  "author": "Jacob Mischka <jmischka@mcw.edu>",
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -34,6 +13,44 @@
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
+  "dependencies": {
+    "@apollo/client": "^3.0.0-beta.19",
+    "apollo-boost": "^0.4.7",
+    "autoprefixer": "^9.7.3",
+    "gatsby": "^2.18.12",
+    "gatsby-image": "^2.2.34",
+    "gatsby-plugin-manifest": "^2.2.31",
+    "gatsby-plugin-offline": "^3.0.27",
+    "gatsby-plugin-react-helmet": "^3.1.16",
+    "gatsby-plugin-sharp": "^2.3.5",
+    "gatsby-source-filesystem": "^2.1.40",
+    "gatsby-transformer-sharp": "^2.3.7",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
+    "normalize.css": "^8.0.1",
+    "postcss-preset-env": "^6.7.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-helmet": "^5.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
+    "@types/react": "^16.9.17",
+    "babel-eslint": "^10.0.3",
+    "babel-preset-gatsby": "^0.2.26",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-react": "^7.17.0",
+    "postcss-css-variables": "^0.14.0",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.4"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/gatsbyjs/gatsby-starter-default"
