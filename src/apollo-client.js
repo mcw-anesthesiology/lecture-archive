@@ -1,7 +1,13 @@
 /** @format */
 /* global process */
 
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
+import React from 'react';
+import {
+	ApolloClient,
+	ApolloProvider,
+	HttpLink,
+	InMemoryCache
+} from '@apollo/client';
 
 const { LECTURES_ENDPOINT } = process.env;
 
@@ -13,3 +19,7 @@ export const lecturesClient = new ApolloClient({
 });
 
 export default lecturesClient;
+
+export const wrapRootElement = ({ element }) => (
+	<ApolloProvider client={lecturesClient}>{element}</ApolloProvider>
+);

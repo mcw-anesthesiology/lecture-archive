@@ -8,16 +8,17 @@
  */
 
 import React from 'react';
+import { Location, navigate } from '@reach/router';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
-import { ApolloProvider } from '@apollo/client';
 
 import Header from './Header.js';
+import SearchForm from '../components/SearchForm.js';
+
+import '../styles/globals.css';
 import '../styles/layout.css';
 
-import lecturesClient from '../apollo-client.js';
-
-const Layout = ({ children }) => {
+const Layout = ({ children, className }) => {
 	const data = useStaticQuery(graphql`
 		query SiteTitleQuery {
 			site {
@@ -29,21 +30,17 @@ const Layout = ({ children }) => {
 	`);
 
 	return (
-		<>
+		<article className="layout">
 			<Header siteTitle={data.site.siteMetadata.title} />
-			<ApolloProvider client={lecturesClient}>
-				<div
-					style={{
-						margin: `0 auto`,
-						maxWidth: 960,
-						padding: `0px 1.0875rem 1.45rem`,
-						paddingTop: 0
-					}}
-				>
-					<main>{children}</main>
-				</div>
-			</ApolloProvider>
-		</>
+			<main className={className}>
+				<Location>
+					{({ location }) => (
+						<SearchForm {...{ location, navigate }} />
+					)}
+				</Location>
+				{children}
+			</main>
+		</article>
 	);
 };
 

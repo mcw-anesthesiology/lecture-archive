@@ -6,7 +6,7 @@ exports.onCreatePage = ({ page, actions }) => {
 	// Make the front page match everything client side.
 	// Normally your paths should be a bit more judicious.
 
-	if (page.path.match(/^\/lecture/)) {
+	if (page.path.match(/^\/lecture($|\/)/)) {
 		page.matchPath = `/lecture/*`;
 		createPage(page);
 	}

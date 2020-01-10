@@ -6,18 +6,14 @@ import { Link } from 'gatsby';
 import Layout from '../components/Layout.js';
 import Image from '../components/Image.js';
 import SEO from '../components/Seo.js';
+import SearchForm from '../components/SearchForm.js';
 
-const IndexPage = () => (
-	<Layout>
-		<SEO title="Home" />
-		<h1>Hi people</h1>
-		<p>Welcome to your new Gatsby site.</p>
-		<p>Now go build something great.</p>
-		<div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-			<Image />
-		</div>
-		<Link to="/page-2/">Go to page 2</Link>
-	</Layout>
-);
+export default function IndexPage({ location, navigate }) {
+	return (
+		<Layout className="home">
+			<SEO title="Home" />
 
-export default IndexPage;
+			<Link to="/lecture-series">Lecture series</Link>
+		</Layout>
+	);
+}
