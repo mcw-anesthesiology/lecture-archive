@@ -1,15 +1,55 @@
 /** @format */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { css } from '@emotion/core';
 import { useQuery, gql } from '@apollo/client';
+import Iframe from 'react-iframe';
+import AspectRatio from 'react-aspect-ratio';
 import { Player } from 'video-react';
+import isUrl from 'is-url';
+
+import { staffClient } from '../apollo-client.js';
 
 import Loading from './Loading.js';
 import AttachmentList from './AttachmentList.js';
 import RichDate, { RichTime } from './RichDate.js';
 
+import 'react-aspect-ratio/aspect-ratio.css';
 import 'video-react/dist/video-react.css';
+
+const lectureStyle = css`
+	& .lecture-dates {
+		display: block;
+
+		& > span {
+			display: inline-block;
+			margin-left: 1em;
+		}
+	}
+`;
+
+const lecturePresentersStyle = css`
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+
+	& li {
+		line-height: 1.2;
+		list-style: none;
+		margin: 0;
+		margin-right: 0.5em;
+
+		&::after {
+			content: ',';
+		}
+	}
+
+	& li:last-child::after {
+		content: '';
+		margin-right: 0;
+	}
+`;
 
 export const LECTURE_FIELDS = gql`
 	fragment LectureFields on Lecture {
@@ -23,24 +63,79 @@ export const LECTURE_FIELDS = gql`
 			name
 			url
 		}
+		presenters {
+			full_name
+			num_lectures
+		}
+		other_presenters
 	}
 `;
 
-const lectureStyle = css`
-	& .lecture-dates {
-		display: block;
-
-		& > span {
-			display: inline-block;
-			margin-left: 1em;
+const PRESENTERS_QUERY = gql`
+	query PresenterStaffQuery($emails: [String]) {
+		staff(emails: $emails) {
+			fullName
+			email
+			... on Faculty {
+				fcdUrl
+			}
 		}
 	}
 `;
+
+export function LecturePresenters({ lecture }) {
+	const emails = lecture.presenters.map(p => p.user_email);
+	const { data } = useQuery(PRESENTERS_QUERY, {
+		variables: {
+			emails
+		},
+		skip: emails.length === 0,
+		client: staffClient
+	});
+
+	const presenters = useMemo(() => {
+		return [
+			...lecture.presenters.map(presenter => {
+				let fcdUrl;
+
+				if (data && data.staff) {
+					const staff = data.staff.find(
+						s => s.email === presenter.user_email
+					);
+					if (staff) {
+						fcdUrl = staff.fcdUrl;
+					}
+				}
+
+				return fcdUrl ? (
+					<a href={fcdUrl} target="_blank">
+						{presenter.full_name}
+					</a>
+				) : (
+					presenter.full_name
+				);
+			}),
+			...lecture.other_presenters
+		];
+	}, [lecture, data]);
+
+	if (!presenters.length) return null;
+
+	return (
+		<ul css={lecturePresentersStyle} className="lecture-presenters">
+			{presenters.map((presenter, i) => (
+				<li key={i}>{presenter}</li>
+			))}
+		</ul>
+	);
+}
 
 export default function Lecture({ lecture }) {
 	return (
 		<div css={lectureStyle} className="lecture">
 			<h1>{lecture.title}</h1>
+
+			<LecturePresenters lecture={lecture} />
 
 			<span className="lecture-dates">
 				<RichDate date={lecture.lecture_date_start} />
@@ -65,8 +160,30 @@ export default function Lecture({ lecture }) {
 	);
 }
 
+const lectureRecordingStyle = css`
+	border: none;
+`;
+
+const RAW_VIDEO_RE = /\.(mp4)$/;
+
+function isRawVideo(url) {
+	return RAW_VIDEO_RE.test(url);
+}
+
 export function LectureRecording({ recording }) {
-	return <Player src={recording} />;
+	if (!isUrl(recording)) return null;
+
+	return (
+		<AspectRatio ratio={1.5} style={{ maxWidth: '100%' }}>
+			{isRawVideo(recording) ? (
+				<Player src={recording} />
+			) : (
+				<Iframe src={recording} css={lectureRecordingStyle}>
+					<a href={recording}>Recording link</a>
+				</Iframe>
+			)}
+		</AspectRatio>
+	);
 }
 
 const LECTURE_QUERY = gql`

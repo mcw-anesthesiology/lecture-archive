@@ -1,11 +1,14 @@
 /** @format */
 
-import React from 'react';
+import React, { useCallback } from 'react';
+import { navigate } from '@reach/router';
 import { css } from '@emotion/core';
 import { Link } from 'gatsby';
 import { useQuery, gql } from '@apollo/client';
+import { Film, Paperclip } from 'react-feather';
 
 import RichDate from './RichDate.js';
+import { LecturePresenters } from './Lecture.js';
 
 export const LECTURE_LIST_FIELDS = gql`
 	fragment LectureListFields on Lecture {
@@ -16,6 +19,7 @@ export const LECTURE_LIST_FIELDS = gql`
 		lecture_date_end
 		presenters {
 			full_name
+			email
 		}
 		other_presenters
 	}
@@ -23,8 +27,11 @@ export const LECTURE_LIST_FIELDS = gql`
 
 const lectureListStyle = css`
 	display: flex;
-	flex-wrap: wrap;
-	margin: -0.5em;
+	max-width: 100%;
+	overflow-x: auto;
+	margin: 2em 0;
+	padding: 0.5em;
+	background: #888;
 `;
 
 export default function LectureList({ lectures }) {
@@ -38,44 +45,79 @@ export default function LectureList({ lectures }) {
 }
 
 const lectureListItemStyle = css`
+	flex-shrink: 0;
 	width: 250px;
-	height: 100px;
+	min-height: 150px;
 	margin: 0.5em;
+	padding: 1em;
+	background: #eee;
 
-	& ul {
-		margin: 0;
-		padding: 0;
+	& > a {
+		text-decoration: none;
 
-		& li {
-			display: inline-block;
+		&,
+		&:visited {
+			color: unset;
 		}
+	}
 
-		& li ~ li::before {
-			content: ', ';
-		}
+	&:hover {
+		box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.75);
+	}
+
+	& header {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	& aside {
+		display: flex;
+	}
+
+	& .lecture-presenters {
+		font-size: 0.8em;
 	}
 `;
 
+const ICON_SIZE = 18;
+
 export function LectureListItem({ lecture }) {
-	const presenterNames = lecture.presenters
-		.map(p => p.full_name)
-		.concat(lecture.other_presenters);
+	const icons = [];
+
+	if (lecture.recording) {
+		icons.push(<Film size={ICON_SIZE} />);
+	}
+
+	if (lecture.attachments && lecture.attachments.length > 0) {
+		icons.push(<Paperclip size={ICON_SIZE} />);
+	}
+
+	const lectureUrl = `/lecture/${lecture.id}`;
+
+	const navigateToLecture = useCallback(event => {
+		if (event.defaultPrevented) return;
+
+		navigate(lectureUrl);
+	}, [lectureUrl]);
 
 	return (
-		<div css={lectureListItemStyle}>
-			<Link to={`/lecture/${lecture.id}`}>{lecture.title}</Link>
+			<section css={lectureListItemStyle}>
+				<Link to={lectureUrl}>
+				<header>
+					<h2>
+						{lecture.title}
+					</h2>
+					{icons.length > 0 && <aside>{icons}</aside>}
+				</header>
 
-			{lecture.description && <p>{lecture.description}</p>}
+				{lecture.description && <p>{lecture.description}</p>}
 
-			<div>
-				<RichDate date={lecture.lecture_date_start} />
-			</div>
+				<div>
+					<RichDate date={lecture.lecture_date_start} />
+				</div>
 
-			<ul>
-				{presenterNames.map(name => (
-					<li key={name}>{name}</li>
-				))}
-			</ul>
-		</div>
+				<LecturePresenters lecture={lecture} />
+				</Link>
+			</section>
 	);
 }

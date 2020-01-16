@@ -12,25 +12,25 @@ const flatpickrOptions = {
 
 export function useSearchFormQueryParams({ location }) {
 	const [state, setState] = useState({
-		query: undefined,
-		recordingsOnly: undefined,
-		attachmentsOnly: undefined,
+		query: '',
+		recordingsOnly: false,
+		attachmentsOnly: false,
 		after: undefined,
 		before: undefined
 	});
 
 	useEffect(() => {
 		if (location) {
-			let query, recordingsOnly, attachmentsOnly, after, before;
+			let query = '', recordingsOnly, attachmentsOnly, after, before;
 			const params = new URLSearchParams(location.search);
-			query = params.get('query');
 
-			if (params.has('recordingsOnly')) {
-				recordingsOnly = Boolean(params.get('recordingsOnly'));
+			if (params.has('query')) {
+				query = params.get('query');
 			}
-			if (params.has('attachmentsOnly')) {
-				attachmentsOnly = Boolean(params.get('attachmentsOnly'));
-			}
+
+			recordingsOnly = Boolean(params.get('recordingsOnly'));
+			attachmentsOnly = Boolean(params.get('attachmentsOnly'));
+
 			if (params.has('after')) {
 				after = new Date(Number(params.get('after')));
 			}

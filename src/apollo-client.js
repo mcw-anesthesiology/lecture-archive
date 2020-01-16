@@ -9,12 +9,10 @@ import {
 	InMemoryCache
 } from '@apollo/client';
 
-const { LECTURES_ENDPOINT } = process.env;
-
 export const lecturesClient = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: new HttpLink({
-		uri: LECTURES_ENDPOINT
+		uri: process.env.LECTURES_ENDPOINT
 	})
 });
 
@@ -23,3 +21,10 @@ export default lecturesClient;
 export const wrapRootElement = ({ element }) => (
 	<ApolloProvider client={lecturesClient}>{element}</ApolloProvider>
 );
+
+export const staffClient = new ApolloClient({
+	cache: new InMemoryCache(),
+	link: new HttpLink({
+		uri: process.env.STAFF_ENDPOINT
+	})
+});
