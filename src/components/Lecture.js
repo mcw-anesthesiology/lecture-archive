@@ -65,7 +65,6 @@ export const LECTURE_FIELDS = gql`
 		}
 		presenters {
 			full_name
-			num_lectures
 		}
 		other_presenters
 	}
@@ -95,26 +94,11 @@ export function LecturePresenters({ lecture }) {
 
 	const presenters = useMemo(() => {
 		return [
-			...lecture.presenters.map(presenter => {
-				let fcdUrl;
-
-				if (data && data.staff) {
-					const staff = data.staff.find(
-						s => s.email === presenter.user_email
-					);
-					if (staff) {
-						fcdUrl = staff.fcdUrl;
-					}
-				}
-
-				return fcdUrl ? (
-					<a href={fcdUrl} target="_blank">
+			...lecture.presenters.map(presenter =>
+					<a href={`/presenter/${presenter.id}`} key={presenter.id}>
 						{presenter.full_name}
 					</a>
-				) : (
-					presenter.full_name
-				);
-			}),
+			),
 			...lecture.other_presenters
 		];
 	}, [lecture, data]);

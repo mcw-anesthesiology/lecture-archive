@@ -19,7 +19,6 @@ export const LECTURE_LIST_FIELDS = gql`
 		lecture_date_end
 		presenters {
 			full_name
-			email
 		}
 		other_presenters
 	}
