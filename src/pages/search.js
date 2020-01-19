@@ -6,7 +6,10 @@ import { useQuery, gql } from '@apollo/client';
 
 import Layout from '../components/Layout.js';
 import SEO from '../components/Seo.js';
-import { useSearchFormQueryParams } from '../components/SearchForm.js';
+import {
+	useBeforeAfterDateQueryParams,
+	useSearchFormQueryParams
+} from '../components/SearchForm.js';
 import Loading from '../components/Loading.js';
 import { LECTURE_LIST_FIELDS } from '../components/LectureList.js';
 
@@ -26,13 +29,10 @@ export default function SearchPage({ location }) {
 }
 
 export function SearchResults({ location }) {
-	const {
-		query,
-		recordingsOnly,
-		attachmentsOnly,
-		after,
-		before
-	} = useSearchFormQueryParams({ location });
+	const { query, recordingsOnly, attachmentsOnly } = useSearchFormQueryParams(
+		location
+	);
+	const { after, before } = useBeforeAfterDateQueryParams(location);
 
 	const { data, loading } = useQuery(LECTURE_SEARCH_QUERY, {
 		variables: {

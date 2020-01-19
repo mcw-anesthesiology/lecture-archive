@@ -93,19 +93,20 @@ export function LectureListItem({ lecture }) {
 
 	const lectureUrl = `/lecture/${lecture.id}`;
 
-	const navigateToLecture = useCallback(event => {
-		if (event.defaultPrevented) return;
+	const navigateToLecture = useCallback(
+		event => {
+			if (event.defaultPrevented) return;
 
-		navigate(lectureUrl);
-	}, [lectureUrl]);
+			navigate(lectureUrl);
+		},
+		[lectureUrl]
+	);
 
 	return (
-			<section css={lectureListItemStyle}>
-				<Link to={lectureUrl}>
+		<section css={lectureListItemStyle}>
+			<Link to={lectureUrl}>
 				<header>
-					<h2>
-						{lecture.title}
-					</h2>
+					<h2>{lecture.title}</h2>
 					{icons.length > 0 && <aside>{icons}</aside>}
 				</header>
 
@@ -116,7 +117,7 @@ export function LectureListItem({ lecture }) {
 				</div>
 
 				<LecturePresenters lecture={lecture} />
-				</Link>
-			</section>
+			</Link>
+		</section>
 	);
 }

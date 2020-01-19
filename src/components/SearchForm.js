@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { css } from '@emotion/core';
 
@@ -9,27 +11,16 @@ const flatpickrOptions = {
 	dateFormat: 'M j, Y'
 };
 
-
-export function useSearchFormQueryParams({ location }) {
+export function useBeforeAfterDateQueryParams(location) {
 	const [state, setState] = useState({
-		query: '',
-		recordingsOnly: false,
-		attachmentsOnly: false,
 		after: undefined,
 		before: undefined
 	});
 
 	useEffect(() => {
 		if (location) {
-			let query = '', recordingsOnly, attachmentsOnly, after, before;
+			let after, before;
 			const params = new URLSearchParams(location.search);
-
-			if (params.has('query')) {
-				query = params.get('query');
-			}
-
-			recordingsOnly = Boolean(params.get('recordingsOnly'));
-			attachmentsOnly = Boolean(params.get('attachmentsOnly'));
 
 			if (params.has('after')) {
 				after = new Date(Number(params.get('after')));
@@ -39,11 +30,40 @@ export function useSearchFormQueryParams({ location }) {
 			}
 
 			setState({
-				query,
-				recordingsOnly,
-				attachmentsOnly,
 				after,
 				before
+			});
+		}
+	}, [location]);
+
+	return state;
+}
+
+export function useSearchFormQueryParams(location) {
+	const [state, setState] = useState({
+		query: '',
+		recordingsOnly: false,
+		attachmentsOnly: false
+	});
+
+	useEffect(() => {
+		if (location) {
+			let query = '',
+				recordingsOnly,
+				attachmentsOnly;
+			const params = new URLSearchParams(location.search);
+
+			if (params.has('query')) {
+				query = params.get('query');
+			}
+
+			recordingsOnly = Boolean(params.get('recordingsOnly'));
+			attachmentsOnly = Boolean(params.get('attachmentsOnly'));
+
+			setState({
+				query,
+				recordingsOnly,
+				attachmentsOnly
 			});
 		}
 	}, [location]);
@@ -115,29 +135,15 @@ const searchFormStyle = css`
 		display: inline-block;
 		margin-right: 0.25em;
 	}
-
-	& .dates-container {
-		flex-grow: 1;
-	}
-
-	& .dates-container > label {
-		width: 8em;
-		flex-grow: 1;
-	}
-
-	& .dates-container input {
-		width: 100%;
-	}
 `;
 
 export default function SearchForm({ location, navigate }) {
 	const {
 		query = '',
 		recordingsOnly,
-		attachmentsOnly,
-		after,
-		before
-	} = useSearchFormQueryParams({ location });
+		attachmentsOnly
+	} = useSearchFormQueryParams(location);
+	const { after, before } = useBeforeAfterDateQueryParams(location);
 
 	const [enteredQuery, setEnteredQuery] = useState(query);
 	const [hasRecording, setHasRecording] = useState(Boolean(recordingsOnly));
@@ -200,9 +206,7 @@ export default function SearchForm({ location, navigate }) {
 			</div>
 			<details>
 				<summary>
-					<span>
-						Advanced
-					</span>
+					<span>Advanced</span>
 				</summary>
 				<fieldset>
 					<legend>Only show lectures</legend>
@@ -229,31 +233,57 @@ export default function SearchForm({ location, navigate }) {
 								With attachments
 							</label>
 						</div>
-						<div className="dates-container">
-							<label>
-								After
-								<Flatpickr
-									value={selectedAfter}
-									onChange={([d]) => {
-										setSelectedAfter(d);
-									}}
-									options={flatpickrOptions}
-								/>
-							</label>
-							<label>
-								Before
-								<Flatpickr
-									value={selectedBefore}
-									onChange={([d]) => {
-										setSelectedBefore(d);
-									}}
-									options={flatpickrOptions}
-								/>
-							</label>
-						</div>
 					</div>
+					<DateRangeSelector
+						after={selectedAfter}
+						before={selectedBefore}
+						setAfter={setSelectedAfter}
+						setBefore={setSelectedBefore}
+					/>
 				</fieldset>
 			</details>
 		</form>
+	);
+}
+
+const dateRangeContainerStyle = css`
+	flex-grow: 1;
+
+	& > label {
+		width: 8em;
+		margin: 0.25em 0.5em;
+		flex-grow: 1;
+	}
+
+	& input {
+		display: block;
+		width: 100%;
+	}
+`;
+
+export function DateRangeSelector({ before, after, setBefore, setAfter }) {
+	return (
+		<div css={dateRangeContainerStyle}>
+			<label>
+				After
+				<Flatpickr
+					value={after}
+					onChange={([d]) => {
+						setAfter(d);
+					}}
+					options={flatpickrOptions}
+				/>
+			</label>
+			<label>
+				Before
+				<Flatpickr
+					value={before}
+					onChange={([d]) => {
+						setBefore(d);
+					}}
+					options={flatpickrOptions}
+				/>
+			</label>
+		</div>
 	);
 }
