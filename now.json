@@ -1,4 +1,14 @@
 {
 	"scope": "mcw-anesth",
-	"name": "mcw-anesth-lectures"
+	"name": "mcw-anesth-lectures",
+	"env": {
+		"GATSBY_LECTURES_ENDPOINT": "@lectures-gql-endpoint",
+		"GATSBY_STAFF_ENDPOINT": "@staff-api-endpoint"
+	},
+	"build": {
+		"env": {
+			"GATSBY_LECTURES_ENDPOINT": "@lectures-gql-endpoint",
+			"GATSBY_STAFF_ENDPOINT": "@staff-api-endpoint"
+		}
+	}
 }

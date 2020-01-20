@@ -13,7 +13,9 @@ import fetch from 'isomorphic-fetch';
 export const lecturesClient = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: new HttpLink({
-		uri: process.env.LECTURES_ENDPOINT
+		uri:
+			process.env.GATSBY_LECTURES_ENDPOINT ||
+			process.env.LECTURES_ENDPOINT
 	}),
 	fetch
 });
@@ -27,7 +29,7 @@ export const wrapRootElement = ({ element }) => (
 export const staffClient = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: new HttpLink({
-		uri: process.env.STAFF_ENDPOINT
+		uri: process.env.GATSBY_STAFF_ENDPOINT || process.env.STAFF_ENDPOINT
 	}),
 	fetch
 });
