@@ -1,0 +1,9 @@
+main.home {
+	& .recent-lectures {
+		margin-top: 3em;
+
+		& form {
+			margin-top: 1em;
+		}
+	}
+}

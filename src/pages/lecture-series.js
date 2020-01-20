@@ -1,13 +1,20 @@
 /** @format */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { Router } from '@reach/router';
 import { Link } from 'gatsby';
 import { useQuery, gql } from '@apollo/client';
 
 import Layout from '../components/Layout.js';
 import SEO from '../components/Seo.js';
 import LectureList, { LECTURE_LIST_FIELDS } from '../components/LectureList.js';
+import { LectureSeriesContainer } from '../components/LectureSeries.js';
 import Loading from '../components/Loading.js';
+import {
+	useSearchFormQueryParams,
+	LimitInput,
+	RecordingsOnlyInput
+} from '../components/SearchForm.js';
 
 import '../styles/lecture-series.css';
 
@@ -31,8 +38,23 @@ const LECTURE_SERIES_QUERY = gql`
 `;
 
 export default function LectureSeriesPage() {
-	const [recordingsOnly, setRecordingsOnly] = useState(true);
-	const [limit, setLimit] = useState(5);
+	return (
+		<Layout className="lecture-series">
+			<SEO title="Lecture series" />
+
+			<Router basepath="lecture-series">
+				<LectureSeriesHome default />
+				<LectureSeriesContainer path=":id" />
+			</Router>
+		</Layout>
+	);
+}
+
+export function LectureSeriesHome({ location, navigate }) {
+	const defaultLimit = 5;
+	const { recordingsOnly, limit = defaultLimit } = useSearchFormQueryParams(
+		location
+	);
 
 	const { data, loading } = useQuery(LECTURE_SERIES_QUERY, {
 		variables: {
@@ -43,27 +65,10 @@ export default function LectureSeriesPage() {
 	});
 
 	return (
-		<Layout className="lecture-series">
-			<SEO title="Lecture series" />
-
-			<form className="lecture-series-filter">
-				<label>
-					<input
-						type="checkbox"
-						checked={recordingsOnly}
-						onChange={event => {
-						setRecordingsOnly(event.target.checked);
-						}}
-					/>
-					Only show lectures with recordings
-				</label>
-
-				<label className="limit-control">
-					Lectures per series
-					<input type="number" value={limit} onChange={event => {
-						setLimit(event.target.value);
-					}} />
-				</label>
+		<div>
+			<form className="lecture-filter">
+				<RecordingsOnlyInput {...{ location, navigate }} />
+				<LimitInput {...{ location, navigate, defaultLimit }} />
 			</form>
 
 			{loading ? (
@@ -73,15 +78,24 @@ export default function LectureSeriesPage() {
 					{data.lecture_series
 						.filter(ls => ls.lectures.length)
 						.map(ls => (
-							<div key={ls.id}>
-								<h2>{ls.name}</h2>
-								<p>{ls.description}</p>
+							<div
+								key={ls.id}
+								className="lecture-series-list-item"
+							>
+								<h2>
+									<Link to={`/lecture-series/${ls.id}`}>
+										{ls.name}
+										<small>See all</small>
+									</Link>
+								</h2>
+
+								{ls.description && <p>{ls.description}</p>}
 
 								<LectureList lectures={ls.lectures} />
 							</div>
 						))}
 				</div>
 			)}
-		</Layout>
+		</div>
 	);
 }

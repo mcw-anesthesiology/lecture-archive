@@ -49,31 +49,29 @@ export function SearchResults({ location }) {
 		return <Loading />;
 	}
 
-	if (data && data.lectures) {
+	if (data && data.lectures && data.lectures.length > 0) {
 		const { lectures } = data;
 		return (
 			<div>
-				{lectures.length > 0 ? (
-					<>
-						<p>
-							Results for <i>{query}</i>
-						</p>
-						<ol>
-							{lectures.map(lecture => (
-								<li key={lecture.id}>
-									<SearchResultLecture lecture={lecture} />
-								</li>
-							))}
-						</ol>
-					</>
-				) : (
-					<p>
-						No lectures found for <i>{query}</i>
-					</p>
-				)}
+				<p>
+					Results for <i>{query}</i>
+				</p>
+				<ol>
+					{lectures.map(lecture => (
+						<li key={lecture.id}>
+							<SearchResultLecture lecture={lecture} />
+						</li>
+					))}
+				</ol>
 			</div>
 		);
 	}
+
+	return (
+		<p>
+			No lectures found for <i>{query}</i>
+		</p>
+	);
 }
 
 export function SearchResultLecture({ lecture }) {

@@ -13,7 +13,7 @@ html {
 	--dark-text-color: #111;
 	--text-color: var(--light-text-color);
 
-	--primary-color-rgb: 235, 144, 55;
+	--primary-color-rgb: var(--mcw-anesth-dark-green-rgb);
 
 	--border-color: #ddd;
 	--primary-color: rgb(var(--primary-color-rgb));
@@ -24,18 +24,15 @@ html {
 
 	--heading-font-family: sans-serif;
 	--heading-font-style: normal;
-	--heading-font-weight: 200;
-	--heading-text-transform: uppercase;
+	--heading-font-weight: 400;
 
 	--link-font-family: var(--heading-font-family);
 	--link-font-style: var(--heading-font-style);
 	--link-font-weight: var(--heading-font-weight);
-	--link-text-transform: var(--heading-text-transform);
 
 	--accent-font-family: var(--heading-font-family);
 	--accent-font-style: var(--heading-font-style);
 	--accent-font-weight: var(--heading-font-weight);
-	--accent-text-transform: var(--heading-text-transform);
 
 	--heading-color: var(--primary-color);
 	--link-color: var(--primary-color);
@@ -90,14 +87,25 @@ progress {
 template {
 	display: none;
 }
+
 a {
+	color: var(--link-color);
 	background-color: transparent;
-	-webkit-text-decoration-skip: objects;
+	font-family: var(--link-font-family);
+	font-style: var(--link-font-style);
+	font-weight: var(--link-font-weight);
+	text-decoration: none;
+
+	&:active,
+	&:hover {
+		text-decoration: underline;
+	}
+
+	&:visited {
+		color: var(--visited-link-color);
+	}
 }
-a:active,
-a:hover {
-	outline-width: 0;
-}
+
 abbr[title] {
 	border-bottom: none;
 	text-decoration: underline;

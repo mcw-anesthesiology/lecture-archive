@@ -42,28 +42,44 @@ export function useBeforeAfterDateQueryParams(location) {
 export function useSearchFormQueryParams(location) {
 	const [state, setState] = useState({
 		query: '',
-		recordingsOnly: false,
-		attachmentsOnly: false
+		recordingsOnly: true,
+		attachmentsOnly: false,
+		limit: undefined
 	});
 
 	useEffect(() => {
 		if (location) {
 			let query = '',
-				recordingsOnly,
-				attachmentsOnly;
+				recordingsOnly = true,
+				attachmentsOnly,
+				limit;
 			const params = new URLSearchParams(location.search);
 
 			if (params.has('query')) {
 				query = params.get('query');
 			}
 
-			recordingsOnly = Boolean(params.get('recordingsOnly'));
+			if (params.has('limit')) {
+				const n = Number(params.get('limit'));
+				if (!Number.isNaN(n)) {
+					limit = n;
+				}
+			}
+
+			if (params.has('recordingsOnly')) {
+				const v = params.get('recordingsOnly');
+				if (v === 'false' || v === '0' || !Boolean(v)) {
+					recordingsOnly = false;
+				}
+			}
+
 			attachmentsOnly = Boolean(params.get('attachmentsOnly'));
 
 			setState({
 				query,
 				recordingsOnly,
-				attachmentsOnly
+				attachmentsOnly,
+				limit
 			});
 		}
 	}, [location]);
@@ -176,8 +192,8 @@ export default function SearchForm({ location, navigate }) {
 		if (enteredQuery) {
 			params.set('query', enteredQuery);
 		}
-		if (hasRecording) {
-			params.set('recordingsOnly', true);
+		if (!hasRecording) {
+			params.set('recordingsOnly', false);
 		}
 		if (hasAttachment) {
 			params.set('attachmentsOnly', true);
@@ -285,5 +301,73 @@ export function DateRangeSelector({ before, after, setBefore, setAfter }) {
 				/>
 			</label>
 		</div>
+	);
+}
+
+const checkboxInputStyle = css`
+	& input[type='checkbox'] {
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 0.25em;
+	}
+`;
+
+export function RecordingsOnlyInput({ location, navigate }) {
+	const { recordingsOnly } = useSearchFormQueryParams(location);
+
+	const handleRecordingsOnlyChange = useCallback(
+		event => {
+			const { pathname, search } = location;
+
+			const params = new URLSearchParams(search);
+			if (!event.target.checked) {
+				params.set('recordingsOnly', false);
+			} else {
+				params.delete('recordingsOnly');
+			}
+
+			navigate(`${pathname}?${params.toString()}`, { replace: true });
+		},
+		[location, navigate]
+	);
+
+	return (
+		<label css={checkboxInputStyle}>
+			<input
+				type="checkbox"
+				checked={recordingsOnly}
+				onChange={handleRecordingsOnlyChange}
+			/>
+			Only show lectures with recordings
+		</label>
+	);
+}
+
+const limitInputStyle = css`
+	& input {
+		width: 9em;
+	}
+`;
+
+export function LimitInput({ location, navigate, defaultLimit = '' }) {
+	const { limit = defaultLimit } = useSearchFormQueryParams(location);
+
+	const handleLimitChange = useCallback(
+		event => {
+			const { pathname, search } = location;
+
+			const params = new URLSearchParams(search);
+			params.set('limit', event.target.value);
+
+			navigate(`${pathname}?${params.toString()}`, { replace: true });
+		},
+		[location, navigate]
+	);
+
+	return (
+		<label css={limitInputStyle}>
+			Lectures per series
+			<input type="number" value={limit} onChange={handleLimitChange} />
+		</label>
 	);
 }

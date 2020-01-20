@@ -3,3 +3,22 @@
 article.layout > main {
 	margin: 1em 10vw;
 }
+
+form.lecture-filter {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	font-size: 0.9em;
+	margin: 0 -1em;
+
+	& > * {
+		margin: 0 1em;
+	}
+
+	& label input[type="text"],
+	& label input[type="number"],
+	& label input[type="text"],
+	& label textarea {
+		display: block;
+	}
+}

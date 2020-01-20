@@ -10,6 +10,10 @@ exports.onCreatePage = ({ page, actions }) => {
 		page.matchPath = `/lecture/*`;
 		createPage(page);
 	}
+	if (page.path.match(/^\/lecture-series($|\/)/)) {
+		page.matchPath = `/lecture-series/*`;
+		createPage(page);
+	}
 	if (page.path.match(/^\/presenter($|\/)/)) {
 		page.matchPath = `/presenter/*`;
 		createPage(page);

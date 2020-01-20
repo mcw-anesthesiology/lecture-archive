@@ -10,7 +10,9 @@ export default function Header({ siteTitle = '' }) {
 	return (
 		<header>
 			<h1>
-				<Link to="/">{siteTitle}</Link>
+				<Link to="/" aria-label="Go home">
+					{siteTitle}
+				</Link>
 			</h1>
 		</header>
 	);

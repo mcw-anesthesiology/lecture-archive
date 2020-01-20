@@ -1,18 +1,14 @@
 /** @format */
 
 import React, { useMemo } from 'react';
+import { Link } from 'gatsby';
 import { css } from '@emotion/core';
 import { useQuery, gql } from '@apollo/client';
-import Iframe from 'react-iframe';
-import AspectRatio from 'react-aspect-ratio';
-import { Player } from 'video-react';
-import isUrl from 'is-url';
-
-import { staffClient } from '../apollo-client.js';
 
 import Loading from './Loading.js';
 import AttachmentList from './AttachmentList.js';
 import RichDate, { RichTime } from './RichDate.js';
+import LectureRecording from './LectureRecording.js';
 
 import 'react-aspect-ratio/aspect-ratio.css';
 import 'video-react/dist/video-react.css';
@@ -25,6 +21,10 @@ const lectureStyle = css`
 			display: inline-block;
 			margin-left: 1em;
 		}
+	}
+
+	& > p {
+		margin: 2em 0;
 	}
 `;
 
@@ -51,10 +51,18 @@ const lecturePresentersStyle = css`
 	}
 `;
 
+export const LECTURE_PRESENTER_FIELDS = gql`
+	fragment LecturePresenterFields on User {
+		id
+		full_name
+	}
+`;
+
 export const LECTURE_FIELDS = gql`
 	fragment LectureFields on Lecture {
 		id
 		title
+		notes
 		recording
 		lecture_date_start
 		lecture_date_end
@@ -64,6 +72,7 @@ export const LECTURE_FIELDS = gql`
 			url
 		}
 		presenters {
+			id
 			full_name
 		}
 		other_presenters
@@ -82,26 +91,21 @@ const PRESENTERS_QUERY = gql`
 	}
 `;
 
-export function LecturePresenters({ lecture }) {
-	const emails = lecture.presenters.map(p => p.user_email);
-	const { data } = useQuery(PRESENTERS_QUERY, {
-		variables: {
-			emails
-		},
-		skip: emails.length === 0,
-		client: staffClient
-	});
-
+export function LecturePresenters({ lecture, showLinks = true }) {
 	const presenters = useMemo(() => {
 		return [
 			...lecture.presenters.map(presenter =>
-					<a href={`/presenter/${presenter.id}`} key={presenter.id}>
+				showLinks && presenter.id ? (
+					<Link to={`/presenter/${presenter.id}`} key={presenter.id}>
 						{presenter.full_name}
-					</a>
+					</Link>
+				) : (
+					presenter.full_name
+				)
 			),
 			...lecture.other_presenters
 		];
-	}, [lecture, data]);
+	}, [lecture]);
 
 	if (!presenters.length) return null;
 
@@ -135,38 +139,12 @@ export default function Lecture({ lecture }) {
 				<LectureRecording recording={lecture.recording} />
 			)}
 
-			{lecture.description && <p>{lecture.description}</p>}
+			{lecture.notes && <p>{lecture.notes}</p>}
 
 			{lecture.attachments && (
 				<AttachmentList attachments={lecture.attachments} />
 			)}
 		</div>
-	);
-}
-
-const lectureRecordingStyle = css`
-	border: none;
-`;
-
-const RAW_VIDEO_RE = /\.(mp4)$/;
-
-function isRawVideo(url) {
-	return RAW_VIDEO_RE.test(url);
-}
-
-export function LectureRecording({ recording }) {
-	if (!isUrl(recording)) return null;
-
-	return (
-		<AspectRatio ratio={1.5} style={{ maxWidth: '100%' }}>
-			{isRawVideo(recording) ? (
-				<Player src={recording} />
-			) : (
-				<Iframe src={recording} css={lectureRecordingStyle}>
-					<a href={recording}>Recording link</a>
-				</Iframe>
-			)}
-		</AspectRatio>
 	);
 }
 

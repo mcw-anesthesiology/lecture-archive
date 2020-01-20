@@ -1,5 +1,5 @@
 .layout > header {
-	background: var(--mcw-anesth-dark-green);
+	background: var(--primary-color);
 	margin-bottom: 1.5em;
 	padding: 1em 10vw;
 
@@ -10,10 +10,9 @@
 }
 
 .layout > header h1 a {
-	text-decoration: none;
-}
 
-.layout > header h1 a,
-.layout > header h1 a:visited {
-	color: #eee;
+	&,
+	&:visited {
+		color: #eee;
+	}
 }

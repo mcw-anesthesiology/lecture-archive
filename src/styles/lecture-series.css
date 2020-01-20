@@ -1,31 +1,14 @@
-form.lecture-series-filter {
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	font-size: 0.9em;
-	margin: 0 -1em;
+.lecture-series-list-item {
 
-	& > * {
-		margin: 0 1em;
-	}
+	& h2 {
+		margin-bottom: 0.25em;
 
-	& label input[type="text"],
-	& label input[type="number"],
-	& label input[type="text"],
-	& label textarea {
-		display: block;
-	}
-
-	& label input[type="checkbox"] {
-		display: inline-block;
-		vertical-align: middle;
-		margin-right: 0.25em;
-	}
-
-	& .limit-control {
-
-		& input {
-			width: 9em;
+		& small {
+			padding-left: 1em;
 		}
+	}
+
+	& ~ .lecture-series-list-item {
+		margin-top: 3em;
 	}
 }
