@@ -8,12 +8,14 @@ import {
 	HttpLink,
 	InMemoryCache
 } from '@apollo/client';
+import fetch from 'isomorphic-fetch';
 
 export const lecturesClient = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: new HttpLink({
 		uri: process.env.LECTURES_ENDPOINT
-	})
+	}),
+	fetch
 });
 
 export default lecturesClient;
@@ -26,5 +28,6 @@ export const staffClient = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: new HttpLink({
 		uri: process.env.STAFF_ENDPOINT
-	})
+	}),
+	fetch
 });
