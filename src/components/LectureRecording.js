@@ -7,6 +7,9 @@ import AspectRatio from 'react-aspect-ratio';
 import { Player } from 'video-react';
 import isUrl from 'is-url';
 
+import 'react-aspect-ratio/aspect-ratio.css';
+import 'video-react/dist/video-react.css';
+
 import Loading from './Loading.js';
 
 const lectureRecordingStyle = css`
