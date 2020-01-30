@@ -10,15 +10,15 @@ form.lecture-filter {
 	align-items: center;
 	font-size: 0.9em;
 	margin: 0 -1em;
+}
 
-	& > * {
-		margin: 0 1em;
-	}
+form.lecture-filter > * {
+	margin: 0 1em;
+}
 
-	& label input[type="text"],
-	& label input[type="number"],
-	& label input[type="text"],
-	& label textarea {
-		display: block;
-	}
+form.lecture-filter label input[type='text'],
+form.lecture-filter label input[type='number'],
+form.lecture-filter label input[type='text'],
+form.lecture-filter label textarea {
+	display: block;
 }

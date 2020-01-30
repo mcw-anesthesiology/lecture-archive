@@ -1,14 +1,11 @@
-.lecture-series-list-item {
+.lecture-series-list-item h2 {
+	margin-bottom: 0.25em;
+}
 
-	& h2 {
-		margin-bottom: 0.25em;
+.lecture-series-list-item h2 small {
+	padding-left: 1em;
+}
 
-		& small {
-			padding-left: 1em;
-		}
-	}
-
-	& ~ .lecture-series-list-item {
-		margin-top: 3em;
-	}
+.lecture-series-list-item ~ .lecture-series-list-item {
+	margin-top: 3em;
 }

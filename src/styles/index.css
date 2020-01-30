@@ -1,9 +1,7 @@
-main.home {
-	& .recent-lectures {
-		margin-top: 3em;
+main.home .recent-lectures {
+	margin-top: 3em;
+}
 
-		& form {
-			margin-top: 1em;
-		}
-	}
+main.home .recent-lectures form {
+	margin-top: 1em;
 }

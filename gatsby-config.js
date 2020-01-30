@@ -2,7 +2,6 @@
 /* eslint-env node */
 
 const postcssPresetEnv = require('postcss-preset-env');
-const autoprefixer = require('autoprefixer');
 
 module.exports = {
 	siteMetadata: {
@@ -46,8 +45,7 @@ module.exports = {
 						features: {
 							'nesting-rules': true
 						}
-					}),
-					autoprefixer()
+					})
 				]
 			}
 		}
