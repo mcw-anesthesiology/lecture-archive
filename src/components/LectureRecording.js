@@ -7,9 +7,11 @@ import AspectRatio from 'react-aspect-ratio';
 import { Player } from 'video-react';
 import isUrl from 'is-url';
 
-import 'video-react/dist/video-react.css';
+import { logError } from '../errors.js';
 
 import Loading from './Loading.js';
+
+import 'video-react/dist/video-react.css';
 
 const lectureRecordingStyle = css`
 	border: none;
@@ -26,14 +28,14 @@ const aspectRatioStyle = css`
 		height: auto;
 	}
 
-	@supports (--custom:property) {
+	@supports (--custom: property) {
 		& {
 			position: relative;
 		}
 
 		&::before {
 			height: 0;
-			content: "";
+			content: '';
 			display: block;
 			padding-bottom: calc(100% / (var(--aspect-ratio)));
 		}
@@ -45,7 +47,7 @@ const aspectRatioStyle = css`
 			height: 100%;
 		}
 	}
-`
+`;
 
 const RAW_VIDEO_RE = /\.(mp4)$/;
 
@@ -53,11 +55,43 @@ function isRawVideo(url) {
 	return RAW_VIDEO_RE.test(url);
 }
 
+const YOUTU_BE_RE = /youtu\.be/;
+const YOUTUBE_RE = /youtube\.com/;
+const YOUTUBE_EMBED_URL = 'https://www.youtube.com/embed';
+
+function getYoutubeEmbedUrl(s) {
+	try {
+		let videoId;
+		if (YOUTUBE_RE.test(s)) {
+			console.log('hm');
+			const url = new URL(s);
+			videoId = url.searchParams.get('v');
+		}
+
+		if (YOUTU_BE_RE.test(s)) {
+			const url = new URL(s);
+			videoId = url.pathname.substring(1);
+		}
+
+		if (videoId) {
+			return `${YOUTUBE_EMBED_URL}/${videoId}`;
+		}
+	} catch (err) {
+		logError(err);
+	}
+
+	return s;
+}
+
 export default function LectureRecording({ recording }) {
 	if (!isUrl(recording)) return null;
 
 	return (
-		<AspectRatio css={aspectRatioStyle} ratio={1.5} style={{ maxWidth: '100%' }}>
+		<AspectRatio
+			css={aspectRatioStyle}
+			ratio={1.5}
+			style={{ maxWidth: '100%' }}
+		>
 			{isRawVideo(recording) ? (
 				<Player src={recording} />
 			) : (
@@ -69,6 +103,10 @@ export default function LectureRecording({ recording }) {
 
 export function RecordingEmbed({ recording }) {
 	const [loaded, setLoaded] = useState(false);
+
+	if (YOUTUBE_RE.test(recording) || YOUTU_BE_RE.test(recording)) {
+		recording = getYoutubeEmbedUrl(recording);
+	}
 
 	return (
 		<>
