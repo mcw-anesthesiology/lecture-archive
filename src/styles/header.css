@@ -1,18 +1,16 @@
 .layout > header {
 	background: var(--primary-color);
 	margin-bottom: 1.5em;
-	padding: 1em 10vw;
-
+	padding: 1em;
 }
 
 .layout > header h1 {
-	margin: 0;
+	margin: 0 auto;
+	max-width: 80vw;
+	width: var(--body-width);
 }
 
-.layout > header h1 a {
-
-	&,
-	&:visited {
-		color: #eee;
-	}
+.layout > header h1 a,
+.layout > header h1 a:visited {
+	color: #eee;
 }

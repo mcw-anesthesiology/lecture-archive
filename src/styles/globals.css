@@ -13,6 +13,8 @@ html {
 	--dark-text-color: #111;
 	--text-color: var(--light-text-color);
 
+	--body-width: 800px;
+
 	--primary-color-rgb: var(--mcw-anesth-dark-green-rgb);
 
 	--border-color: #ddd;
