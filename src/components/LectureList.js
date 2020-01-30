@@ -25,7 +25,7 @@ export const LECTURE_LIST_FIELDS = gql`
 	}
 `;
 
-const LECTURE_LIST_ITEM_WIDTH = '300px';
+const LECTURE_LIST_ITEM_WIDTH = '250px';
 
 const lectureListStyle = css`
 	display: flex;
