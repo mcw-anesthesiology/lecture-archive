@@ -25,12 +25,12 @@ module.exports = {
 			resolve: 'gatsby-plugin-manifest',
 			options: {
 				name: 'gatsby-starter-default',
-				short_name: 'starter',
+				short_name: 'MCW Lectures',
 				start_url: '/',
-				background_color: '#663399',
-				theme_color: '#663399',
+				background_color: '#006f66',
+				theme_color: '#006f66',
 				display: 'minimal-ui',
-				icon: 'src/images/gatsby-icon.png' // This path is relative to the root of the site.
+				icon: 'src/images/icon.svg' // This path is relative to the root of the site.
 			}
 		},
 		// this (optional) plugin enables Progressive Web App + Offline functionality

@@ -18,7 +18,7 @@ import SearchForm from '../components/SearchForm.js';
 import '../styles/globals.css';
 import '../styles/layout.css';
 
-const Layout = ({ children, className }) => {
+export default function Layout({ children, className }) {
 	const data = useStaticQuery(graphql`
 		query SiteTitleQuery {
 			site {
@@ -42,10 +42,8 @@ const Layout = ({ children, className }) => {
 			</main>
 		</article>
 	);
-};
+}
 
 Layout.propTypes = {
 	children: PropTypes.node.isRequired
 };
-
-export default Layout;
