@@ -100,12 +100,18 @@ const lectureListItemStyle = css`
 	}
 
 	& header {
-		display: flex;
-		justify-content: space-between;
+		& > div {
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+			font-size: 0.9em;
+		}
 
 		& h2 {
 			font-size: 1.25em;
 			margin-bottom: 0.5em;
+			overflow-wrap: break-word;
+			hyphens: auto;
 		}
 	}
 
@@ -137,15 +143,16 @@ export function LectureListItem({ lecture }) {
 		<section css={lectureListItemStyle} className="lecture-list-item">
 			<Link to={lectureUrl}>
 				<header>
+					<div>
+						<RichDate date={lecture.lecture_date_start} />
+						{icons.length > 0 && <aside>{icons}</aside>}
+					</div>
 					<h2>{lecture.title}</h2>
-					{icons.length > 0 && <aside>{icons}</aside>}
 				</header>
 
 				{lecture.notes && <p>{lecture.notes}</p>}
 
 				<LecturePresenters lecture={lecture} showLinks={false} />
-
-				<RichDate date={lecture.lecture_date_start} />
 			</Link>
 		</section>
 	);

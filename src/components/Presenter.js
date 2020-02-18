@@ -32,8 +32,7 @@ export function PresenterContainer({ id, location }) {
 		variables: {
 			id,
 			hasRecording: recordingsOnly || undefined
-		},
-		fetchPolicy: 'cache-and-network'
+		}
 	});
 
 	if (loading && !data) return <Loading />;

@@ -60,8 +60,7 @@ export function LectureSeriesHome({ location, navigate }) {
 		variables: {
 			limit,
 			hasRecording: recordingsOnly || undefined
-		},
-		fetchPolicy: 'cache-and-network'
+		}
 	});
 
 	return (

@@ -33,8 +33,7 @@ export function LectureSeriesContainer({ id }) {
 		variables: {
 			id,
 			hasRecording: recordingsOnly || undefined
-		},
-		fetchPolicy: 'cache-and-network'
+		}
 	});
 
 	let lectureSeries;

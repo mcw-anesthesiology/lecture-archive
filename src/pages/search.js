@@ -41,8 +41,7 @@ export function SearchResults({ location }) {
 			has_attachment: attachmentsOnly || undefined,
 			after,
 			before
-		},
-		fetchPolicy: 'cache-and-network'
+		}
 	});
 
 	if (loading && !data) {

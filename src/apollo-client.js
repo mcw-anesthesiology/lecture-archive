@@ -17,7 +17,15 @@ export const lecturesClient = new ApolloClient({
 			process.env.GATSBY_LECTURES_ENDPOINT ||
 			process.env.LECTURES_ENDPOINT
 	}),
-	fetch
+	fetch,
+	defaultOptions: {
+		watchQuery: {
+			fetchPolicy: 'cache-and-network'
+		},
+		query: {
+			fetchPolicy: 'cache-and-network'
+		}
+	}
 });
 
 export default lecturesClient;
