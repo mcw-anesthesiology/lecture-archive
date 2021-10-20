@@ -10,10 +10,12 @@ const attachmentList = css`
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	justify-content: center;
 	margin: 1em;
 `;
 
 const attachmentListItem = css`
+	flex: 1 1;
 	border: 1px solid #ccc;
 	margin: 1em;
 	border-radius: 2px;
@@ -44,7 +46,7 @@ const attachmentListItem = css`
 export default function AttachmentList({ attachments = [] }) {
 	return (
 		<div css={attachmentList}>
-			{attachments.map(attachment => (
+			{attachments.map((attachment) => (
 				<AttachmentListItem
 					key={attachment.id}
 					attachment={attachment}
@@ -59,7 +61,7 @@ function getFileType(extension) {
 		const map = new Map([
 			['image', /(jpg|png|jpeg)/i],
 			['presentation', /ppt.?/i],
-			['spreadsheeet', /xls.?/i]
+			['spreadsheeet', /xls.?/i],
 		]);
 
 		for (const [fileType, regex] of map.entries()) {
